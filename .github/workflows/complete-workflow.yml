@@ -44,8 +44,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   zap_scan:
     runs-on: ubuntu-latest
-    needs: security
-    name: Run DAST scan on the web application
+    name: Scan the webapplication
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -54,7 +53,9 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-api-scan@v0.3.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'http://testphp.vulnweb.com/'
+          format: openapi
+          target: 'https://www.zaproxy.org/'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
